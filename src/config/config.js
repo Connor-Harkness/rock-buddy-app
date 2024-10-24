@@ -42,8 +42,10 @@ async function getSteamProfiles() {
     const steamUserDataPath = document.getElementById('steam_user_data_path').innerText;
 
     // Get all Steam profiles on disk
-    const steamProfiles = await api.getSteamProfiles(steamUserDataPath);
-    const profileNames = Object.keys(steamProfiles);
+    // const steamProfiles = await api.getSteamProfiles(steamUserDataPath);
+    // const profileNames = Object.keys(steamProfiles);
+    const steamProfiles = ["CODEX","RUNE"]
+    const profileNames = ["CODEX","RUNE"]
 
     // If a profile is already saved, remember it
     let selectedProfile = await api.storeGet('user_data.' + userId + '.steam_profile');
@@ -83,7 +85,9 @@ async function getSteamProfiles() {
 async function getRocksmithProfiles() {
     const steamUserDataPath = document.getElementById('steam_user_data_path').innerText;
     const steamProfile = await api.storeGet('user_data.' + userId + '.steam_profile');
-
+    console.log("getRocksmitProfiles")
+    console.log(steamUserDataPath);
+    console.log(steamProfile);
     // Get all Rocksmith profiles on disk
     const rocksmithProfiles = await api.getRocksmithProfiles(steamUserDataPath, steamProfile);
     const profileNames = Object.keys(rocksmithProfiles);
@@ -115,6 +119,7 @@ async function getRocksmithProfiles() {
     comboBox.addEventListener('change', async () => {
         const selectedOption = comboBox.options[comboBox.selectedIndex];
         const selectedProfile = selectedOption.value;
+        console.log(`SELECTED PROFILE: ${selectedProfile}`)
         await api.storeSet('user_data.' + userId + '.rocksmith_profile', selectedProfile);
         sessionStorage.setItem('rocksmith_profile', selectedProfile);
     });
@@ -335,10 +340,10 @@ async function initRocksnifferConfig() {
         await api.storeSet('user_data.' + userId + '.use_external_rocksniffer', useExternalRocksnifferCheckbox.checked);
 
         if (useExternalRocksnifferCheckbox.checked) {
-            
+
             lurkModeCheckbox.checked = true;
             lurkModeCheckbox.disabled = true;
-            
+
             const changeEvent = new Event('change');
             lurkModeCheckbox.dispatchEvent(changeEvent);
         }

@@ -13,7 +13,8 @@ export class Rocksmith {
             throw new Error('Steam user data path not set, please check the config.');
         }
 
-        const steamProfile = await UserData.get('steam_profile');
+        // const steamProfile = await UserData.get('steam_profile');
+        const steamProfile = "CODEX"
         if (steamProfile === null) {
             throw new Error('Steam profile not set, please check the config.');
         }

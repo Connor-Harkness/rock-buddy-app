@@ -103,12 +103,12 @@ function checkForUpdates(win) {
 
             // Ignore pre-release versions
             if (semver.prerelease(version)) {
-                
+
                 if (!betaTesting) {
                     continue;
                 }
             }
-            
+
             if (semver.gt(version, currentVersion)) {
 
                 // Create popup
@@ -212,14 +212,20 @@ function getSteamProfiles(steamUserDataPath) {
 
 function getRocksmithProfiles(steamUserDataPath, steamProfile) {
     let profiles = {};
-    const rocksmithDataFolder = path.join(steamUserDataPath, steamProfile.toString(), rocksmithAppId.toString(), 'remote');
+    // const rocksmithDataFolder = path.join(steamUserDataPath, steamProfile.toString(), rocksmithAppId.toString(), 'remote');
+    const rocksmithDataFolder = path.join(steamUserDataPath,"CODEX", rocksmithAppId.toString(),'remote')
     const localProfilesFile = path.join(rocksmithDataFolder, 'LocalProfiles.json');
-
-    // Read the localProfiles.json file to get the list of available profiles
-    const localProfiles = readRocksmithData(localProfilesFile);
-    localProfiles['Profiles'].forEach((profile) => {
-        profiles[profile['PlayerName']] = profile['UniqueID'];
-    });
+    console.log(`SteamUserData: ${steamUserDataPath} \nSteamProfile: ${steamProfile} \nRocksmithAppID: ${rocksmithAppId}`)
+    console.log(`GETROCKSMITHPROFILE: \nData Folder: ${rocksmithDataFolder} \nLocalProfilesFile: ${localProfilesFile}`)
+    if (fs.existsSync(localProfilesFile)){
+        // Read the localProfiles.json file to get the list of available profiles
+        const localProfiles = readRocksmithData(localProfilesFile);
+        localProfiles['Profiles'].forEach((profile) => {
+            profiles[profile['PlayerName']] = profile['UniqueID'];
+        });
+    } else {
+        console.log(`NO FILE FOUND FOR: ${localProfilesFile.toString()}`);
+    }
 
     return profiles;
 }
